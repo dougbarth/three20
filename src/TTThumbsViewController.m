@@ -14,15 +14,6 @@ static CGFloat kThumbnailRowHeight = 79;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface TTThumbsDataSource : TTDataSource
-          <TTPhotoSourceDelegate, TTThumbsTableViewCellDelegate> {
-  TTThumbsViewController* _controller;
-}
-
-- (id)initWithController:(TTThumbsViewController*)controller;
-
-@end
-
 @implementation TTThumbsDataSource
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
