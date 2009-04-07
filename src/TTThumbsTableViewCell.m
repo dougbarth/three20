@@ -5,13 +5,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 static CGFloat kSpacing = 4;
-static CGFloat kThumbSize = 75;
+static CGFloat kDefaultThumbSize = 75;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 @implementation TTThumbsTableViewCell
 
-@synthesize delegate = _delegate, photo = _photo;
+@synthesize delegate = _delegate, photo = _photo, thumbSize = _thumbSize, thumbOrigin = _thumbOrigin;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // private
@@ -43,6 +43,20 @@ static CGFloat kThumbSize = 75;
   [_delegate thumbsTableViewCell:self didSelectPhoto:photo];
 }
 
+- (void)layoutThumbViews {
+    CGRect thumbFrame = CGRectMake(self.thumbOrigin.x, self.thumbOrigin.y, self.thumbSize, self.thumbSize);
+    _thumbView1.frame = thumbFrame;
+    
+    thumbFrame.origin.x = self.thumbOrigin.x + kSpacing + self.thumbSize;
+    _thumbView2.frame = thumbFrame;
+    
+    thumbFrame.origin.x = self.thumbOrigin.x + 2*kSpacing + 2*self.thumbSize;
+    _thumbView3.frame = thumbFrame;
+    
+    thumbFrame.origin.x = self.thumbOrigin.x + 3*kSpacing + 3*self.thumbSize;
+    _thumbView4.frame = thumbFrame;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // NSObject
 
@@ -50,32 +64,32 @@ static CGFloat kThumbSize = 75;
   if (self = [super initWithFrame:frame reuseIdentifier:identifier]) {
     _photo = nil;
     _delegate = nil;
-    _thumbView1 = [[TTThumbView alloc]
-      initWithFrame:CGRectMake(kSpacing, 0, kThumbSize, kThumbSize)];
+    _thumbSize = kDefaultThumbSize;
+    _thumbOrigin = CGPointMake(kSpacing, 0);
+    _thumbView1 = [[TTThumbView alloc] initWithFrame:CGRectZero];
     [_thumbView1 addTarget:self action:@selector(thumbTouched:)
       forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:_thumbView1];
 
-    _thumbView2 = [[TTThumbView alloc]
-      initWithFrame:CGRectMake(kSpacing*2+kThumbSize, 0, kThumbSize, kThumbSize)];
+    _thumbView2 = [[TTThumbView alloc] initWithFrame:CGRectZero];
     [_thumbView2 addTarget:self action:@selector(thumbTouched:)
       forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:_thumbView2];
 
-    _thumbView3 = [[TTThumbView alloc]
-      initWithFrame:CGRectMake(kSpacing*3+kThumbSize*2, 0, kThumbSize, kThumbSize)];
+    _thumbView3 = [[TTThumbView alloc] initWithFrame:CGRectZero];
     [_thumbView3 addTarget:self action:@selector(thumbTouched:)
       forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:_thumbView3];
 
-    _thumbView4 = [[TTThumbView alloc]
-      initWithFrame:CGRectMake(kSpacing*4+kThumbSize*3, 0, kThumbSize, kThumbSize)];
+    _thumbView4 = [[TTThumbView alloc] initWithFrame:CGRectZero];
     [_thumbView4 addTarget:self action:@selector(thumbTouched:)
       forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:_thumbView4];
 
     self.accessoryType = UITableViewCellAccessoryNone;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+      
+    [self layoutThumbViews];
   }
   return self;
 }
@@ -100,6 +114,11 @@ static CGFloat kThumbSize = 75;
   [self setPhoto:object];
 }
 
+- (void)layoutSubviews {
+  [super layoutSubviews];
+  [self layoutThumbViews];
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // public
 
@@ -122,6 +141,16 @@ static CGFloat kThumbSize = 75;
     [self assignPhotoAtIndex:_photo.index+2 toView:_thumbView3];
     [self assignPhotoAtIndex:_photo.index+3 toView:_thumbView4];
   }  
+}
+
+- (void)setThumbSize:(CGFloat)thumbSize {
+  _thumbSize = thumbSize;
+  [self setNeedsLayout];
+}
+
+- (void)setThumbOrigin:(CGPoint)thumbOrigin {
+  _thumbOrigin = thumbOrigin;
+  [self setNeedsLayout];  
 }
 
 - (void)suspendLoading:(BOOL)suspended {
