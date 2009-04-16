@@ -1,5 +1,6 @@
 # xcode noise
 src/build/*
+samples/TTCatalog/build/*
 *.pbxuser
 *.mode1v3
 *.perspectivev3
