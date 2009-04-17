@@ -1,5 +1,5 @@
 #import "Three20/TTPhotoView.h"
-#import "Three20/TTAppearance.h"
+#import "Three20/TTDefaultStyleSheet.h"
 #import "Three20/TTImageView.h"
 #import "Three20/TTActivityLabel.h"
 #import "Three20/TTURLCache.h"
@@ -39,8 +39,8 @@ static const CGFloat kMaxCaptionHeight = 100;
     if (!_captionLabel) {
       _captionLabel = [[UILabel alloc] initWithFrame:CGRectZero];
       _captionLabel.opaque = NO;
-      _captionLabel.textColor = [UIColor whiteColor];
-      _captionLabel.font = [UIFont boldSystemFontOfSize:13.0];
+      _captionLabel.textColor = TTSTYLEVAR(photoCaptionTextColor);
+      _captionLabel.font = TTSTYLEVAR(photoCaptionFont);
       _captionLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.9];
       _captionLabel.shadowOffset = CGSizeMake(1, 1);
       _captionLabel.backgroundColor = [UIColor clearColor];
@@ -235,8 +235,8 @@ static const CGFloat kMaxCaptionHeight = 100;
   if (text) {
     if (!_statusLabel) {
       _statusLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-      _statusLabel.font = [UIFont boldSystemFontOfSize:17];
-      _statusLabel.textColor = [TTAppearance appearance].tableErrorTextColor;
+      _statusLabel.font = TTSTYLEVAR(tableFont);
+      _statusLabel.textColor = TTSTYLEVAR(tableErrorTextColor);
       _statusLabel.backgroundColor = [UIColor clearColor];
       _statusLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.7];
       _statusLabel.shadowOffset = CGSizeMake(1, 1);

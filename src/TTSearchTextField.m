@@ -1,6 +1,7 @@
 #import "Three20/TTSearchTextField.h"
 #import "Three20/TTNavigationCenter.h"
-#import "Three20/TTStyledView.h"
+#import "Three20/TTView.h"
+#import "Three20/TTDefaultStyleSheet.h"
 #import "Three20/TTTableFieldCell.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,9 +169,9 @@ static const CGFloat kDesiredTableHeight = 150;
       _previousNavigationItem = [controller.navigationItem retain];
       _previousRightBarButtonItem = [controller.navigationItem.rightBarButtonItem retain];
       
-      UIBarButtonItem* doneButton = [[UIBarButtonItem alloc]
+      UIBarButtonItem* doneButton = [[[UIBarButtonItem alloc]
       initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-      target:self action:@selector(doneAction)];
+      target:self action:@selector(doneAction)] autorelease];
       [controller.navigationItem setRightBarButtonItem:doneButton animated:YES];
     } else {
       [_previousNavigationItem setRightBarButtonItem:_previousRightBarButtonItem animated:YES];
@@ -185,7 +186,7 @@ static const CGFloat kDesiredTableHeight = 150;
 - (void)showDarkScreen:(BOOL)show {
   if (show && !_screenView) {
     _screenView = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-    _screenView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
+    _screenView.backgroundColor = TTSTYLEVAR(screenBackgroundColor);
     _screenView.frame = [self rectForSearchResults:NO];
     _screenView.alpha = 0;
     [_screenView addTarget:self action:@selector(doneAction)
@@ -313,33 +314,37 @@ static const CGFloat kDesiredTableHeight = 150;
 // UIControlEvents
 
 - (void)didBeginEditing {
-  UIScrollView* scrollView = (UIScrollView*)[self firstParentOfClass:[UIScrollView class]];
-  scrollView.scrollEnabled = NO;
-  scrollView.scrollsToTop = NO;
+  if (_dataSource) {
+    UIScrollView* scrollView = (UIScrollView*)[self firstParentOfClass:[UIScrollView class]];
+    scrollView.scrollEnabled = NO;
+    scrollView.scrollsToTop = NO;
 
-  if (_showsDoneButton) {
-    [self showDoneButton:YES];
-  }
-  if (_showsDarkScreen) {
-    [self showDarkScreen:YES];
-  }
-  if (self.hasText) {
-    [self showSearchResults:YES];
+    if (_showsDoneButton) {
+      [self showDoneButton:YES];
+    }
+    if (_showsDarkScreen) {
+      [self showDarkScreen:YES];
+    }
+    if (self.hasText) {
+      [self showSearchResults:YES];
+    }
   }
 }
 
 - (void)didEndEditing {
-  UIScrollView* scrollView = (UIScrollView*)[self firstParentOfClass:[UIScrollView class]];
-  scrollView.scrollEnabled = YES;
-  scrollView.scrollsToTop = YES;
-  
-  [self showSearchResults:NO];
-  
-  if (_showsDoneButton) {
-    [self showDoneButton:NO];
-  }
-  if (_showsDarkScreen) {
-    [self showDarkScreen:NO];
+  if (_dataSource) {
+    UIScrollView* scrollView = (UIScrollView*)[self firstParentOfClass:[UIScrollView class]];
+    scrollView.scrollEnabled = YES;
+    scrollView.scrollsToTop = YES;
+    
+    [self showSearchResults:NO];
+    
+    if (_showsDoneButton) {
+      [self showDoneButton:NO];
+    }
+    if (_showsDarkScreen) {
+      [self showDarkScreen:NO];
+    }
   }
 }
 
@@ -358,8 +363,8 @@ static const CGFloat kDesiredTableHeight = 150;
 - (UITableView*)tableView {
   if (!_tableView) {
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    _tableView.backgroundColor = [TTAppearance appearance].searchTableBackgroundColor;
-    _tableView.separatorColor = [TTAppearance appearance].searchTableSeparatorColor;
+    _tableView.backgroundColor = TTSTYLEVAR(searchTableBackgroundColor);
+    _tableView.separatorColor = TTSTYLEVAR(searchTableSeparatorColor);
     _tableView.rowHeight = _rowHeight;
     _tableView.dataSource = _dataSource;
     _tableView.delegate = self;
@@ -393,20 +398,19 @@ static const CGFloat kDesiredTableHeight = 150;
 }
 
 - (void)showSearchResults:(BOOL)show {
-  if (show) {
+  if (show && _dataSource) {
     self.tableView;
     
     if (!_shadowView) {
-      _shadowView = [[TTStyledView alloc] initWithFrame:CGRectZero];
-      _shadowView.style = TTStyleInnerShadow;
+      _shadowView = [[TTView alloc] initWithFrame:CGRectZero];
+      _shadowView.style = TTSTYLE(searchTableShadow);
       _shadowView.backgroundColor = [UIColor clearColor];
-      _shadowView.contentMode = UIViewContentModeRedraw;
       _shadowView.userInteractionEnabled = NO;
     }
 
     if (!_tableView.superview) {
       _tableView.frame = [self rectForSearchResults:YES];
-      _shadowView.frame = CGRectMake(_tableView.left, _tableView.top,
+      _shadowView.frame = CGRectMake(_tableView.left, _tableView.top-1,
         _tableView.width, kShadowHeight);
       
       UIView* superview = self.superviewForSearchResults;

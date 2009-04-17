@@ -62,6 +62,13 @@ CGRect TTRectContract(CGRect rect, CGFloat dx, CGFloat dy) {
   return CGRectMake(rect.origin.x, rect.origin.y, rect.size.width - dx, rect.size.height - dy);
 }
 
+CGRect TTRectInset(CGRect rect, UIEdgeInsets insets) {
+  return CGRectMake(rect.origin.x + insets.left, rect.origin.y + insets.top,
+                    rect.size.width - (insets.left + insets.right),
+                    rect.size.height - (insets.top + insets.bottom));
+                    
+}
+
 void TTNetworkRequestStarted() {
   if (gNetworkTaskCount++ == 0) {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -94,4 +101,26 @@ NSString* TTLocalizedString(NSString* key, NSString* comment) {
   }
   
   return [bundle localizedStringForKey:key value:key table:nil];
+}
+
+BOOL TTIsBundleURL(NSString* url) {
+  return [url rangeOfString:@"bundle://" options:0 range:NSMakeRange(0,9)].location == 0;
+}
+
+BOOL TTIsDocumentsURL(NSString* url) {
+  return [url rangeOfString:@"documents://" options:0 range:NSMakeRange(0,12)].location == 0;
+}
+
+NSString* TTPathForBundleResource(NSString* relativePath) {
+  NSString* resourcePath = [[NSBundle mainBundle] resourcePath];
+  return [resourcePath stringByAppendingPathComponent:relativePath];
+}
+
+NSString* TTPathForDocumentsResource(NSString* relativePath) {
+  static NSString* documentsPath = nil;
+  if (!documentsPath) {
+    NSArray* dirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    documentsPath = [[dirs objectAtIndex:0] retain];
+  }
+  return [documentsPath stringByAppendingPathComponent:relativePath];
 }

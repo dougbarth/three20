@@ -1,62 +1,62 @@
-#import "Three20/TTGlobal.h"
+#import "Three20/TTView.h"
+#import "Three20/TTButton.h"
 
-@class TTTabItem, TTTabView, TTImageView;
+@class TTTabItem, TTTab, TTImageView, TTLabel;
 
-typedef enum {
-  TTTabBarStyleDark,
-  TTTabBarStyleLight,
-  TTTabBarStyleButtons
-} TTTabBarStyle;
+@protocol TTTabDelegate;
 
-@protocol TTTabBarDelegate;
-
-@interface TTTabBar : UIView {
-  id<TTTabBarDelegate> _delegate;
-  TTTabBarStyle _style;
+@interface TTTabBar : TTView {
+  id<TTTabDelegate> _delegate;
+  NSString* _tabStyle;
   NSInteger _selectedTabIndex;
-  UIImageView* _overflowLeft;
-  UIImageView* _overflowRight;
-  UIScrollView* _scrollView;
   NSArray* _tabItems;
   NSMutableArray* _tabViews;
-  UIColor* _textColor;
-  UIColor* _tintColor;
-  UIImage* _tabImage;
 }
 
-@property(nonatomic,assign) id delegate;
+@property(nonatomic,assign) id<TTTabDelegate> delegate;
 @property(nonatomic,retain) NSArray* tabItems;
 @property(nonatomic,readonly) NSArray* tabViews;
+@property(nonatomic,copy) NSString* tabStyle;
 @property(nonatomic,assign) TTTabItem* selectedTabItem;
-@property(nonatomic,assign) TTTabView* selectedTabView;
+@property(nonatomic,assign) TTTab* selectedTabView;
 @property(nonatomic) NSInteger selectedTabIndex;
-@property(nonatomic) CGPoint contentOffset;
-@property(nonatomic,retain) UIColor* textColor;
-@property(nonatomic,retain) UIColor* tintColor;
-@property(nonatomic,retain) UIImage* tabImage;
 
-- (id)initWithFrame:(CGRect)frame style:(TTTabBarStyle)style;
+- (id)initWithFrame:(CGRect)frame;
 
 - (void)showTabAtIndex:(NSInteger)tabIndex;
 - (void)hideTabAtIndex:(NSInteger)tabIndex;
 
 @end
 
-@interface TTTabView : UIControl {
-  TTTabBarStyle _style;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+@interface TTTabStrip : TTTabBar {
+  TTView* _overflowLeft;
+  TTView* _overflowRight;
+  UIScrollView* _scrollView;
+}
+
+@end
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+@interface TTTabGrid : TTTabBar
+@end
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+@interface TTTab : TTButton {
   TTTabItem* _tabItem;
-  UIImageView* _tabImage;
-  TTImageView* _iconView;
-  UILabel* _titleLabel;
-  UIImageView* _badgeImage;
-  UILabel* _badgeLabel;
+  TTLabel* _badge;
 }
 
 @property(nonatomic,retain) TTTabItem* tabItem;
 
-- (id)initWithItem:(TTTabItem*)item tabBar:(TTTabBar*)tabBar style:(TTTabBarStyle)style;
+- (id)initWithItem:(TTTabItem*)item tabBar:(TTTabBar*)tabBar;
 
 @end
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 @interface TTTabItem : NSObject {
   NSString* _title;
@@ -75,6 +75,10 @@ typedef enum {
 
 @end
 
-@protocol TTTabBarDelegate <NSObject>
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+@protocol TTTabDelegate <NSObject>
+
 - (void)tabBar:(TTTabBar*)tabBar tabSelected:(NSInteger)selectedIndex;
+
 @end

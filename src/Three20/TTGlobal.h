@@ -6,7 +6,6 @@
 #import "Three20/UIImageAdditions.h"
 #import "Three20/UIViewControllerAdditions.h"
 #import "Three20/UIViewAdditions.h"
-#import "Three20/UIButtonAdditions.h"
 #import "Three20/UITableViewAdditions.h"
 #import "Three20/UIWebViewAdditions.h"
 #import "Three20/UIToolbarAdditions.h"
@@ -34,6 +33,9 @@
   TTLOG(@"%s left=%f, right=%f, top=%f, bottom=%f", #edges, edges.left, edges.right, \
     edges.top, edges.bottom)
 
+#define TTLOGHSV(_COLOR) \
+  TTLOG(@"%s h=%f, s=%f, v=%f", #_COLOR, _COLOR.hue, _COLOR.saturation, _COLOR.value)
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Errors
 
@@ -47,15 +49,34 @@
 #define STATUS_HEIGHT 20
 #define TOOLBAR_HEIGHT 44
 #define KEYBOARD_HEIGHT 216
-#define TABLE_GROUPED_PADDING 10
 #define CHROME_HEIGHT (STATUS_HEIGHT + TOOLBAR_HEIGHT)
+#define TABLE_GROUPED_PADDING 10
+#define TT_ROUNDED -1
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Color helpers
 
-#define RGBA(r,g,b,a) r/256.0, g/256.0, b/256.0, a
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:r/256.0 green:g/256.0 blue:b/256.0 alpha:1]
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:r/256.0 green:g/256.0 blue:b/256.0 alpha:a]
+
+#define HSVCOLOR(h,s,v) [UIColor colorWithHue:h saturation:s value:v alpha:1]
+#define HSVACOLOR(h,s,v,a) [UIColor colorWithHue:h saturation:s value:v alpha:a]
+
+#define RGBA(r,g,b,a) r/256.0, g/256.0, b/256.0, a
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Style helpers
+
+#define TTSTYLE(_SELECTOR) [[TTStyleSheet globalStyleSheet] styleWithSelector:@#_SELECTOR]
+
+#define TTSTYLESTATE(_SELECTOR, _STATE) [[TTStyleSheet globalStyleSheet] \
+                                           styleWithSelector:@#_SELECTOR forState:_STATE]
+
+#define TTSTYLESHEET ((id)[TTStyleSheet globalStyleSheet])
+
+#define TTSTYLEVAR(_VARNAME) [TTSTYLESHEET _VARNAME]
+
+#define TTIMAGE(_URL) [[TTURLCache sharedCache] imageForURL:_URL]
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Networking
@@ -71,6 +92,9 @@ typedef enum {
    TTURLRequestCachePolicyDefault = TTURLRequestCachePolicyAny,
 } TTURLRequestCachePolicy;
 
+#define TT_DEFAULT_CACHE_INVALIDATION_AGE (60*60*24) // 1 day
+#define TT_DEFAULT_CACHE_EXPIRATION_AGE (60*60*24*7) // 1 week
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Animation
 
@@ -78,6 +102,8 @@ typedef enum {
  * The standard duration for transition animations.
  */
 #define TT_TRANSITION_DURATION 0.3
+
+#define TT_FAST_TRANSITION_DURATION 0.2
 
 #define TT_FLIP_TRANSITION_DURATION 0.7
 
@@ -126,6 +152,11 @@ CGRect TTToolbarNavigationFrame();
  * Returns a rectangle that is smaller or larger than the source rectangle.
  */
 CGRect TTRectContract(CGRect rect, CGFloat dx, CGFloat dy);
+
+/**
+ * Returns a rectangle whose edges have been added to the insets.
+ */
+CGRect TTRectInset(CGRect rect, UIEdgeInsets insets);
  
 /**
  * Increment the number of active network requests.
@@ -152,6 +183,14 @@ NSLocale* TTCurrentLocale();
  * Returns a localized string from the Three20 bundle.
  */
 NSString* TTLocalizedString(NSString* key, NSString* comment);
+
+BOOL TTIsBundleURL(NSString* url);
+
+BOOL TTIsDocumentsURL(NSString* url);
+
+NSString* TTPathForBundleResource(NSString* relativePath);
+
+NSString* TTPathForDocumentsResource(NSString* relativePath);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -12,6 +12,7 @@
 }
 
 @property(nonatomic, retain) NSString* text;
+@property(nonatomic, readonly) NSString* plainText;
 @property(nonatomic, retain) TTStyledTextNode* nextNode;
 
 - (id)initWithText:(NSString*)text;
@@ -21,17 +22,27 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface TTStyledBoldNode : TTStyledTextNode
+@interface TTStyledSpanNode : TTStyledTextNode {
+  NSString* _className;
+}
+
+@property(nonatomic, retain) NSString* className;
+
 @end
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface TTStyledItalicNode : TTStyledTextNode
+@interface TTStyledBoldNode : TTStyledSpanNode
 @end
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface TTStyledLinkNode : TTStyledTextNode {
+@interface TTStyledItalicNode : TTStyledSpanNode
+@end
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+@interface TTStyledLinkNode : TTStyledSpanNode {
   NSString* _url;
   BOOL _highlighted;
 }

@@ -1,5 +1,7 @@
 #import "Three20/TTActivityLabel.h"
-#import "Three20/TTStyledView.h"
+#import "Three20/TTView.h"
+#import "Three20/TTDefaultStyleSheet.h"
+#import "Three20/TTButton.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -43,18 +45,13 @@ static CGFloat kThinBezelHeight = 35;
     
     self.backgroundColor = [UIColor clearColor];
   
-    _bezelView = [[TTStyledView alloc] initWithFrame:CGRectZero];
+    _bezelView = [[TTView alloc] initWithFrame:CGRectZero];
     if (_style == TTActivityLabelStyleBlackBezel || _style == TTActivityLabelStyleBlackThinBezel) {
       _bezelView.opaque = NO;
-      _bezelView.style = TTStyleFill;
-      _bezelView.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
-      _bezelView.borderRadius = 10;
+      _bezelView.style = TTSTYLE(blackBezel);
     } else if (_style == TTActivityLabelStyleWhiteBezel) {
       _bezelView.opaque = NO;
-      _bezelView.style = TTStyleFill;
-      _bezelView.fillColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
-      _bezelView.borderColor = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1];
-      _bezelView.borderRadius = 10;
+      _bezelView.style = TTSTYLE(whiteBezel);
     } else if (_style == TTActivityLabelStyleWhiteBox) {
       _bezelView.backgroundColor = [UIColor whiteColor];
       self.backgroundColor = [UIColor whiteColor];
@@ -76,20 +73,20 @@ static CGFloat kThinBezelHeight = 35;
     if (_style == TTActivityLabelStyleWhite) {
       _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
         UIActivityIndicatorViewStyleWhite];
-      _textView.font = [UIFont systemFontOfSize:17];
+      _textView.font = TTSTYLEVAR(activityLabelFont);
       _textView.textColor = [UIColor whiteColor];
     } else if (_style == TTActivityLabelStyleGray
                 || _style == TTActivityLabelStyleWhiteBox
                || _style == TTActivityLabelStyleWhiteBezel) {
       _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
         UIActivityIndicatorViewStyleGray];
-      _textView.font = [UIFont systemFontOfSize:17];
-      _textView.textColor = [TTAppearance appearance].tableActivityTextColor;
+      _textView.font = TTSTYLEVAR(activityLabelFont);
+      _textView.textColor = TTSTYLEVAR(tableActivityTextColor);
     } else if (_style == TTActivityLabelStyleBlackBezel || _style == TTActivityLabelStyleBlackBox) {
       _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
         UIActivityIndicatorViewStyleWhiteLarge];
       _spinner.frame = CGRectMake(0, 0, 24, 24);
-      _textView.font = [UIFont boldSystemFontOfSize:17];
+      _textView.font = TTSTYLEVAR(activityLabelFont);
       _textView.textColor = [UIColor whiteColor];
       _textView.shadowColor = [UIColor colorWithWhite:0 alpha:0.3];
       _textView.shadowOffset = CGSizeMake(1, 1);
@@ -209,8 +206,8 @@ static CGFloat kThinBezelHeight = 35;
     _showsStopButton = showsStopButton;
     
     if (_showsStopButton) {
-      _stopButton = [[UIButton blackButton] retain];
-      [_stopButton setTitle:TTLocalizedString(@"Stop", @"") forState:UIControlStateNormal];
+      _stopButton = [[TTButton buttonWithStyle:@"blackToolbarButton:"
+                               title:TTLocalizedString(@"Stop", @"")] retain];
       [_stopButton addTarget:self action:@selector(touchedStopButton)
                    forControlEvents:UIControlEventTouchUpInside];
       [_bezelView addSubview:_stopButton];

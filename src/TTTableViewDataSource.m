@@ -140,7 +140,9 @@
     }
   }
   
-  return nil;
+  // This will display an empty white table cell - probably not what you want, but it
+  // is better than crashing, which is what happens if you return nil here
+  return [TTTableViewCell class];
 }
 
 - (NSString*)tableView:(UITableView*)tableView labelForObject:(id)object {
@@ -217,6 +219,10 @@
   }
   va_end(ap); 
 
+  return [[[self alloc] initWithItems:items] autorelease];
+}
+
++ (TTListDataSource*)dataSourceWithItems:(NSMutableArray*)items {
   return [[[self alloc] initWithItems:items] autorelease];
 }
 
@@ -305,6 +311,28 @@
   }
   va_end(ap);
 
+  return [[[self alloc] initWithItems:items sections:sections] autorelease];
+}
+
++ (TTSectionedDataSource*)dataSourceWithArrays:(id)object,... {
+  NSMutableArray* items = [NSMutableArray array];
+  NSMutableArray* sections = [NSMutableArray array];
+  va_list ap;
+  va_start(ap, object);
+  while (object) {
+    if ([object isKindOfClass:[NSString class]]) {
+      [sections addObject:object];
+    } else {
+      [items addObject:object];
+    }
+    object = va_arg(ap, id);
+  }
+  va_end(ap);
+
+  return [[[self alloc] initWithItems:items sections:sections] autorelease];
+}
+
++ (TTSectionedDataSource*)dataSourceWithItems:(NSArray*)items sections:(NSArray*)sections {
   return [[[self alloc] initWithItems:items sections:sections] autorelease];
 }
 

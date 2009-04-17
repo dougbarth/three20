@@ -1,6 +1,7 @@
-#import "Three20/TTShinyLabel.h"
+#import "Three20/TTSearchlightLabel.h"
+#import "Three20/TTDefaultStyleSheet.h"
 
-@implementation TTShinyLabel
+@implementation TTSearchlightLabel
 
 @synthesize text = _text, font = _font, textColor, spotlightColor = _spotlightColor,
   textAlignment = _textAlignment;
@@ -10,7 +11,7 @@
     _timer = nil;
     
     self.text = @"";
-    self.font = [UIFont systemFontOfSize:14];
+    self.font = TTSTYLEVAR(font);
     self.textColor = [UIColor colorWithWhite:0.25 alpha:1];
     self.spotlightColor = [UIColor whiteColor];
     self.textAlignment = UITextAlignmentLeft;

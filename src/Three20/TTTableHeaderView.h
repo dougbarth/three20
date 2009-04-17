@@ -1,6 +1,6 @@
-#import "Three20/TTGlobal.h"
+#import "Three20/TTView.h"
 
-@interface TTTableHeaderView : UIView {
+@interface TTTableHeaderView : TTView {
   UILabel* _label;
 }
 

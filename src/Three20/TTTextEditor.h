@@ -1,9 +1,9 @@
-#import "Three20/TTStyledView.h"
+#import "Three20/TTView.h"
 
 @protocol TTTextEditorDelegate;
 @class TTTextEditorInternal;
 
-@interface TTTextEditor : TTStyledView {
+@interface TTTextEditor : TTView {
   id<TTTextEditorDelegate> _textDelegate;
   TTTextEditorInternal* _internal;
   NSString* _placeholder;
@@ -33,6 +33,8 @@
 - (void)scrollContainerToCursor:(UIScrollView*)scrollView;
 
 @end
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 @protocol TTTextEditorDelegate <UITextViewDelegate>
 

@@ -1,14 +1,14 @@
 
-#import "ImageTest2Controller.h"
+#import "TableImageTestController.h"
 
-@implementation ImageTest2Controller
+@implementation TableImageTestController
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // private
 
 - (TTImageTableField*)fieldForURL:(NSString*)url {
   return [[[TTIconTableField alloc] initWithText:@"Table Row" url:nil image:url
-    defaultImage:[UIImage imageNamed:@"DefaultAlbum.png"]] autorelease];
+    defaultImage:TTIMAGE(@"bundle://DefaultAlbum.png"]] autorelease);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -20,8 +20,8 @@
   self.tableView = [[[UITableView alloc] initWithFrame:self.view.bounds
                                         style:UITableViewStylePlain] autorelease];
   self.tableView.rowHeight = 90;
-	self.tableView.autoresizingMask = 
-    UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth
+    | UIViewAutoresizingFlexibleHeight;
   [self.view addSubview:self.tableView];
 }
 
