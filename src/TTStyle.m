@@ -133,7 +133,7 @@ static const NSInteger kDefaultLightSource = 125;
   }
 }
 
-- (TTStyle*)firstStyleOfClass:(Class)cls {
+- (id)firstStyleOfClass:(Class)cls {
   if ([self isKindOfClass:cls]) {
     return self;
   } else {
@@ -285,16 +285,46 @@ static const NSInteger kDefaultLightSource = 125;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation TTPaddingStyle
+@implementation TTBoxStyle
 
-@synthesize padding = _padding;
+@synthesize margin = _margin, padding = _padding, minSize = _minSize, position = _position;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // NSObject
 
-+ (TTPaddingStyle*)styleWithPadding:(UIEdgeInsets)padding next:(TTStyle*)next {
-  TTPaddingStyle* style = [[[self alloc] initWithNext:next] autorelease];
++ (TTBoxStyle*)styleWithMargin:(UIEdgeInsets)margin next:(TTStyle*)next {
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  style.margin = margin;
+  return style;
+}
+
++ (TTBoxStyle*)styleWithPadding:(UIEdgeInsets)padding next:(TTStyle*)next {
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.padding = padding;
+  return style;
+}
+
++ (TTBoxStyle*)styleWithFloats:(TTPosition)position next:(TTStyle*)next {
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  style.position = position;
+  return style;
+}
+
++ (TTBoxStyle*)styleWithMargin:(UIEdgeInsets)margin padding:(UIEdgeInsets)padding
+               next:(TTStyle*)next {
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  style.margin = margin;
+  style.padding = padding;
+  return style;
+}
+
++ (TTBoxStyle*)styleWithMargin:(UIEdgeInsets)margin padding:(UIEdgeInsets)padding
+               minSize:(CGSize)minSize position:(TTPosition)position next:(TTStyle*)next {
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  style.margin = margin;
+  style.padding = padding;
+  style.minSize = minSize;
+  style.position = position;
   return style;
 }
 
@@ -303,7 +333,10 @@ static const NSInteger kDefaultLightSource = 125;
 
 - (id)initWithNext:(TTStyle*)next {  
   if (self = [super initWithNext:next]) {
+    _margin = UIEdgeInsetsZero;
     _padding = UIEdgeInsetsZero;
+    _minSize = CGSizeZero;
+    _position = TTPositionStatic;
   }
   return self;
 }
@@ -622,6 +655,7 @@ static const NSInteger kDefaultLightSource = 125;
 
 @end
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 @implementation TTMaskStyle
 

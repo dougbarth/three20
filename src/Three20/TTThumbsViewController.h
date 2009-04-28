@@ -17,6 +17,19 @@
 
 @end
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+@interface TTThumbsDataSource : TTDataSource
+          <TTPhotoSourceDelegate, TTThumbsTableViewCellDelegate> {
+  TTThumbsViewController* _controller;
+}
+
+- (id)initWithController:(TTThumbsViewController*)controller;
+
+@end
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 @protocol TTThumbsViewControllerDelegate <NSObject>
 
 - (void)thumbsViewController:(TTThumbsViewController*)controller didSelectPhoto:(id<TTPhoto>)photo;

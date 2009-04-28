@@ -11,7 +11,8 @@ static CGFloat kDefaultThumbSize = 75;
 
 @implementation TTThumbsTableViewCell
 
-@synthesize delegate = _delegate, photo = _photo, thumbSize = _thumbSize, thumbOrigin = _thumbOrigin;
+@synthesize delegate = _delegate, photo = _photo, thumbSize = _thumbSize,
+           thumbOrigin = _thumbOrigin;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // private
@@ -44,17 +45,18 @@ static CGFloat kDefaultThumbSize = 75;
 }
 
 - (void)layoutThumbViews {
-    CGRect thumbFrame = CGRectMake(self.thumbOrigin.x, self.thumbOrigin.y, self.thumbSize, self.thumbSize);
-    _thumbView1.frame = thumbFrame;
-    
-    thumbFrame.origin.x = self.thumbOrigin.x + kSpacing + self.thumbSize;
-    _thumbView2.frame = thumbFrame;
-    
-    thumbFrame.origin.x = self.thumbOrigin.x + 2*kSpacing + 2*self.thumbSize;
-    _thumbView3.frame = thumbFrame;
-    
-    thumbFrame.origin.x = self.thumbOrigin.x + 3*kSpacing + 3*self.thumbSize;
-    _thumbView4.frame = thumbFrame;
+  CGRect thumbFrame = CGRectMake(self.thumbOrigin.x, self.thumbOrigin.y,
+                                 self.thumbSize, self.thumbSize);
+  _thumbView1.frame = thumbFrame;
+  
+  thumbFrame.origin.x = self.thumbOrigin.x + kSpacing + self.thumbSize;
+  _thumbView2.frame = thumbFrame;
+  
+  thumbFrame.origin.x = self.thumbOrigin.x + 2*kSpacing + 2*self.thumbSize;
+  _thumbView3.frame = thumbFrame;
+  
+  thumbFrame.origin.x = self.thumbOrigin.x + 3*kSpacing + 3*self.thumbSize;
+  _thumbView4.frame = thumbFrame;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +68,7 @@ static CGFloat kDefaultThumbSize = 75;
     _delegate = nil;
     _thumbSize = kDefaultThumbSize;
     _thumbOrigin = CGPointMake(kSpacing, 0);
+
     _thumbView1 = [[TTThumbView alloc] initWithFrame:CGRectZero];
     [_thumbView1 addTarget:self action:@selector(thumbTouched:)
       forControlEvents:UIControlEventTouchUpInside];
@@ -104,6 +107,14 @@ static CGFloat kDefaultThumbSize = 75;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+// UIView
+
+- (void)layoutSubviews {
+  [super layoutSubviews];
+  [self layoutThumbViews];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // TTTableViewCell
 
 - (id)object {
@@ -121,6 +132,16 @@ static CGFloat kDefaultThumbSize = 75;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // public
+
+- (void)setThumbSize:(CGFloat)thumbSize {
+  _thumbSize = thumbSize;
+  [self setNeedsLayout];
+}
+
+- (void)setThumbOrigin:(CGPoint)thumbOrigin {
+  _thumbOrigin = thumbOrigin;
+  [self setNeedsLayout];  
+}
 
 - (void)setPhoto:(id<TTPhoto>)photo {
   if (_photo != photo) {

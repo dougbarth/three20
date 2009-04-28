@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "Three20/NSObjectAdditions.h"
+#import "Three20/NSStringAdditions.h"
 #import "Three20/NSArrayAdditions.h"
 #import "Three20/UIColorAdditions.h"
 #import "Three20/UIImageAdditions.h"
@@ -77,6 +78,13 @@
 #define TTSTYLEVAR(_VARNAME) [TTSTYLESHEET _VARNAME]
 
 #define TTIMAGE(_URL) [[TTURLCache sharedCache] imageForURL:_URL]
+
+typedef enum {
+  TTPositionStatic,
+  TTPositionAbsolute,
+  TTPositionFloatLeft,
+  TTPositionFloatRight,
+} TTPosition;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Networking

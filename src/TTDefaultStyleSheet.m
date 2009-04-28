@@ -10,18 +10,18 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // styles
 
-- (TTStyle*)linkText {
-  return
-    [TTTextStyle styleWithColor:self.linkTextColor next:nil];
-}
-
-- (TTStyle*)linkTextHighlighted {
-  return
-    [TTInsetStyle styleWithInset:UIEdgeInsetsMake(-3, -4, -3, -4) next:
-    [TTShapeStyle styleWithShape:[TTRoundedRectangleShape shapeWithRadius:4.5] next:
-    [TTSolidFillStyle styleWithColor:[UIColor colorWithWhite:0 alpha:0.25] next:
-    [TTInsetStyle styleWithInset:UIEdgeInsetsMake(3, 4, 3, 4) next:
-    [TTTextStyle styleWithColor:self.linkTextColor next:nil]]]]];
+- (TTStyle*)linkText:(UIControlState)state {
+  if (state == UIControlStateHighlighted) {
+    return
+      [TTInsetStyle styleWithInset:UIEdgeInsetsMake(-3, -4, -3, -4) next:
+      [TTShapeStyle styleWithShape:[TTRoundedRectangleShape shapeWithRadius:4.5] next:
+      [TTSolidFillStyle styleWithColor:[UIColor colorWithWhite:0.8 alpha:1] next:
+      [TTInsetStyle styleWithInset:UIEdgeInsetsMake(3, 4, 3, 4) next:
+      [TTTextStyle styleWithColor:self.linkTextColor next:nil]]]]];
+  } else {
+    return
+      [TTTextStyle styleWithColor:self.linkTextColor next:nil];
+  }
 }
 
 - (TTStyle*)linkHighlighted {
@@ -33,7 +33,7 @@
 - (TTStyle*)thumbView:(UIControlState)state {
   if (state & UIControlStateHighlighted) {
     return
-      [TTSolidFillStyle styleWithColor:RGBACOLOR(0,0,0,0.6) next:
+      [TTSolidFillStyle styleWithColor:RGBCOLOR(200,200,200) next:
       [TTSolidBorderStyle styleWithColor:RGBACOLOR(0,0,0,0.4) width:1 next:nil]];
   } else {
     return
@@ -185,7 +185,7 @@
     [TTReflectiveFillStyle styleWithColor:RGBCOLOR(221, 17, 27) next:
     [TTInsetStyle styleWithInset:UIEdgeInsetsMake(-1, -1, -1, -1) next:
     [TTSolidBorderStyle styleWithColor:[UIColor whiteColor] width:2 next:
-    [TTPaddingStyle styleWithPadding:UIEdgeInsetsMake(1, 6, 3, 6) next:
+    [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(1, 6, 3, 6) next:
     [TTTextStyle styleWithFont:[UIFont boldSystemFontOfSize:13]
                  color:[UIColor whiteColor] next:nil]]]]]]]];
 }
@@ -240,7 +240,7 @@
       [TTShapeStyle styleWithShape:shape next:
       [TTSolidFillStyle styleWithColor:RGBCOLOR(150, 168, 191) next:
       [TTInnerShadowStyle styleWithColor:RGBACOLOR(0,0,0,0.6) blur:3 offset:CGSizeMake(0, 0) next:
-      [TTPaddingStyle styleWithPadding:UIEdgeInsetsMake(11, 10, 9, 10) next:
+      [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(11, 10, 9, 10) next:
       [TTTextStyle styleWithFont:[UIFont boldSystemFontOfSize:11]  color:RGBCOLOR(255, 255, 255)
                    minimumFontSize:8 shadowColor:RGBACOLOR(0,0,0,0.1) shadowOffset:CGSizeMake(-1,-1)
                    next:nil]]]]];
@@ -248,7 +248,7 @@
     return
       [TTShapeStyle styleWithShape:shape next:
       [TTBevelBorderStyle styleWithHighlight:highlight shadow:shadow width:1 lightSource:125 next:
-      [TTPaddingStyle styleWithPadding:UIEdgeInsetsMake(11, 10, 9, 10) next:
+      [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(11, 10, 9, 10) next:
       [TTTextStyle styleWithFont:[UIFont boldSystemFontOfSize:11]  color:self.linkTextColor
                    minimumFontSize:8 shadowColor:[UIColor colorWithWhite:255 alpha:0.9]
                    shadowOffset:CGSizeMake(0, -1) next:nil]]]];
@@ -286,14 +286,14 @@
       [TTReflectiveFillStyle styleWithColor:TTSTYLEVAR(tabTintColor) next:
       [TTInsetStyle styleWithInset:UIEdgeInsetsMake(-1, -1, 0, -1) next:
       [TTFourBorderStyle styleWithTop:border right:border bottom:nil left:border width:1 next:
-      [TTPaddingStyle styleWithPadding:UIEdgeInsetsMake(6, 12, 2, 12) next:
+      [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(6, 12, 2, 12) next:
       [TTTextStyle styleWithFont:[UIFont boldSystemFontOfSize:14]  color:TTSTYLEVAR(textColor)
                    minimumFontSize:8 shadowColor:[UIColor colorWithWhite:1 alpha:0.8]
                    shadowOffset:CGSizeMake(0, -1) next:nil]]]]]]];
   } else {
     return
       [TTInsetStyle styleWithInset:UIEdgeInsetsMake(5, 1, 1, 1) next:
-      [TTPaddingStyle styleWithPadding:UIEdgeInsetsMake(6, 12, 2, 12) next:
+      [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(6, 12, 2, 12) next:
       [TTTextStyle styleWithFont:[UIFont boldSystemFontOfSize:14]  color:[UIColor whiteColor]
                    minimumFontSize:8 shadowColor:[UIColor colorWithWhite:0 alpha:0.6]
                    shadowOffset:CGSizeMake(0, -1) next:nil]]];
@@ -309,13 +309,13 @@
       [TTReflectiveFillStyle styleWithColor:TTSTYLEVAR(tabBarTintColor) next:
       [TTInnerShadowStyle styleWithColor:RGBACOLOR(0,0,0,0.3) blur:1 offset:CGSizeMake(1, 1) next:
       [TTInsetStyle styleWithInset:UIEdgeInsetsMake(-1, -1, -1, -1) next:
-      [TTPaddingStyle styleWithPadding:UIEdgeInsetsMake(0, 10, 0, 10) next:
+      [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(0, 10, 0, 10) next:
       [TTTextStyle styleWithFont:[UIFont boldSystemFontOfSize:13]  color:[UIColor whiteColor]
                    minimumFontSize:8 shadowColor:[UIColor colorWithWhite:0 alpha:0.5]
                    shadowOffset:CGSizeMake(0, -1) next:nil]]]]]]]];
   } else {
     return
-      [TTPaddingStyle styleWithPadding:UIEdgeInsetsMake(0, 10, 0, 10) next:
+      [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(0, 10, 0, 10) next:
       [TTTextStyle styleWithFont:[UIFont boldSystemFontOfSize:13]  color:self.linkTextColor
                    minimumFontSize:8 shadowColor:[UIColor colorWithWhite:1 alpha:0.9]
                    shadowOffset:CGSizeMake(0, -1) next:nil]];
@@ -359,10 +359,6 @@
   return [UIColor whiteColor];
 }
 
-- (UIColor*)messageFieldTextColor {
-  return [UIColor colorWithWhite:0.5 alpha:1];
-}
-
 - (UIColor*)navigationBarTintColor {
   return RGBCOLOR(119, 140, 168);
 }
@@ -373,6 +369,10 @@
 
 - (UIColor*)searchBarTintColor {
   return RGBCOLOR(200, 200, 200);
+}
+
+- (UIColor*)screenBackgroundColor {
+  return [UIColor colorWithWhite:0 alpha:0.8];
 }
 
 - (UIColor*)backgroundColor {
@@ -423,16 +423,16 @@
   return RGBCOLOR(228, 230, 235);
 }
 
+- (UIColor*)messageFieldTextColor {
+  return [UIColor colorWithWhite:0.5 alpha:1];
+}
+
 - (UIColor*)messageFieldSeparatorColor {
   return [UIColor colorWithWhite:0.7 alpha:1];
 }
 
 - (UIColor*)thumbnailBackgroundColor {
   return [UIColor colorWithWhite:0.95 alpha:1];
-}
-
-- (UIColor*)screenBackgroundColor {
-  return [UIColor colorWithWhite:0 alpha:0.8];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -531,15 +531,20 @@
     [TTShadowStyle styleWithColor:RGBACOLOR(255,255,255,0.25) blur:0 offset:CGSizeMake(0, 1) next:
     [TTReflectiveFillStyle styleWithColor:stateTintColor next:
     [TTBevelBorderStyle styleWithHighlight:[stateTintColor multiplyHue:1 saturation:0.9 value:0.7]
-                        shadow:[stateTintColor multiplyHue:1 saturation:0.5 value:0.55]
+                        shadow:[stateTintColor multiplyHue:1 saturation:0.5 value:0.6]
                         width:1 lightSource:270 next:
     [TTInsetStyle styleWithInset:UIEdgeInsetsMake(0, -1, 0, -1) next:
     [TTBevelBorderStyle styleWithHighlight:nil shadow:RGBACOLOR(0,0,0,0.15)
                         width:1 lightSource:270 next:
-    [TTPaddingStyle styleWithPadding:UIEdgeInsetsMake(8, 8, 8, 8) next:
+    [TTBoxStyle styleWithPadding:UIEdgeInsetsMake(8, 8, 8, 8) next:
     [TTTextStyle styleWithFont:font
                  color:stateTextColor shadowColor:[UIColor colorWithWhite:0 alpha:0.4]
                  shadowOffset:CGSizeMake(0, -1) next:nil]]]]]]]]];
+}
+
+- (TTStyle*)selectionFillStyle:(TTStyle*)next {
+  return [TTLinearGradientFillStyle styleWithColor1:RGBCOLOR(5,140,245)
+                                    color2:RGBCOLOR(1,93,230) next:next];
 }
 
 @end

@@ -1,5 +1,5 @@
 #include "Three20/TTTableField.h"
-#include "Three20/TTStyledTextNode.h"
+#include "Three20/TTStyledNode.h"
 #include "Three20/TTStyledText.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -364,7 +364,7 @@
 
 @implementation TTStyledTextTableField
 
-@synthesize styledText = _styledText;
+@synthesize styledText = _styledText, margin = _margin, padding = _padding;
 
 - (id)initWithStyledText:(TTStyledText*)styledText {
   if (self = [self init]) {
@@ -383,6 +383,8 @@
 - (id)init {
   if (self = [super init]) {
     _styledText = nil;
+    _margin = UIEdgeInsetsZero;
+    _padding = UIEdgeInsetsMake(10, 10, 10, 10);    
   }
   return self;
 }
